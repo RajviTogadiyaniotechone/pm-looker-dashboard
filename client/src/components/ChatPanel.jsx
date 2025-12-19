@@ -87,9 +87,11 @@ const ChatPanel = ({ module, onMarkRead, unreadCount }) => {
                 { headers: getAuthHeader() }
             );
 
-            // Add basic optimistic update roughly (will be fixed by next fetch)
-            // But better to simply append the returned message
-            setMessages(prev => [...prev, response.data]);
+            // Add message with duplicate check (same as socket handler)
+            setMessages(prev => {
+                if (prev.some(m => m.id === response.data.id)) return prev;
+                return [...prev, response.data];
+            });
             setNewMessage('');
             scrollToBottom();
         } catch (error) {
