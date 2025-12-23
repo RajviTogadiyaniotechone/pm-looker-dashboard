@@ -226,7 +226,6 @@ const AdminPanel = ({ onRefresh }) => {
                                     onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
                                 >
                                     <option value="user">User</option>
-                                    <option value="admin">Admin</option>
                                 </select>
                                 <button type="submit" className="btn-success">Create</button>
                                 <button type="button" onClick={() => setShowCreateUser(false)} className="btn-secondary">
