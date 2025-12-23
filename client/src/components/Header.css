@@ -230,10 +230,58 @@
     transition: all 0.2s ease;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.password-input-wrapper-header:focus-within {
     outline: none;
     border-color: var(--primary);
     background: var(--bg-secondary);
+}
+
+.password-input-wrapper-header {
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-md);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+}
+
+.password-input-wrapper-header input {
+    border: none !important;
+    padding: var(--spacing-sm) 0 !important;
+    background: transparent !important;
+    font-size: 0.875rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.password-actions-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding-left: var(--spacing-sm);
+}
+
+.icon-button-header {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.icon-button-header:hover {
+    color: var(--primary);
+    transform: scale(1.1);
+}
+
+.rotate-hover:hover {
+    transform: rotate(180deg) scale(1.1);
 }
 
 .error-message {

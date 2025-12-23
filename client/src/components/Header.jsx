@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { LogOut, User, Lock, X } from 'lucide-react';
+import { LogOut, User, Lock, X, Eye, EyeOff, RefreshCw } from 'lucide-react';
+import { validatePassword, generateStrongPassword } from '../utils/passwordUtils';
 import axios from 'axios';
 import './Header.css';
 
@@ -15,6 +16,9 @@ const Header = ({ user }) => {
     });
     const [passwordError, setPasswordError] = useState('');
     const [passwordSuccess, setPasswordSuccess] = useState('');
+    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const dropdownRef = useRef(null);
 
     // Close dropdown when clicking outside
@@ -157,32 +161,77 @@ const Header = ({ user }) => {
                         <form onSubmit={handleChangePassword}>
                             <div className="form-group">
                                 <label>Current Password</label>
-                                <input
-                                    type="password"
-                                    value={passwordData.currentPassword}
-                                    onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                                    required
-                                />
+                                <div className="password-input-wrapper-header">
+                                    <input
+                                        type={showCurrentPassword ? "text" : "password"}
+                                        value={passwordData.currentPassword}
+                                        onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        className="icon-button-header"
+                                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                        title={showCurrentPassword ? "Hide Password" : "Show Password"}
+                                    >
+                                        {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                    </button>
+                                </div>
                             </div>
 
                             <div className="form-group">
                                 <label>New Password</label>
-                                <input
-                                    type="password"
-                                    value={passwordData.newPassword}
-                                    onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                                    required
-                                />
+                                <div className="password-input-wrapper-header">
+                                    <input
+                                        type={showNewPassword ? "text" : "password"}
+                                        value={passwordData.newPassword}
+                                        onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                                        required
+                                    />
+                                    <div className="password-actions-header">
+                                        <button
+                                            type="button"
+                                            className="icon-button-header"
+                                            onClick={() => setShowNewPassword(!showNewPassword)}
+                                            title={showNewPassword ? "Hide Password" : "Show Password"}
+                                        >
+                                            {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="icon-button-header rotate-hover"
+                                            onClick={() => {
+                                                const pass = generateStrongPassword();
+                                                setPasswordData({ ...passwordData, newPassword: pass, confirmPassword: pass });
+                                                setShowNewPassword(true);
+                                                setShowConfirmPassword(true);
+                                            }}
+                                            title="Generate Strong Password"
+                                        >
+                                            <RefreshCw size={18} />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="form-group">
                                 <label>Confirm New Password</label>
-                                <input
-                                    type="password"
-                                    value={passwordData.confirmPassword}
-                                    onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                                    required
-                                />
+                                <div className="password-input-wrapper-header">
+                                    <input
+                                        type={showConfirmPassword ? "text" : "password"}
+                                        value={passwordData.confirmPassword}
+                                        onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        className="icon-button-header"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        title={showConfirmPassword ? "Hide Password" : "Show Password"}
+                                    >
+                                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                    </button>
+                                </div>
                             </div>
 
                             {passwordError && <div className="error-message">{passwordError}</div>}

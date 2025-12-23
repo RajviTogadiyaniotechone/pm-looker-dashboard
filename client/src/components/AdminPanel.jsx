@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 import axios from 'axios';
-import { Users, Plus, Trash2, Shield, CheckSquare, Square, Video, Phone } from 'lucide-react';
+import { Users, Plus, Trash2, Shield, CheckSquare, Square, Video, Phone, RefreshCw, Eye, EyeOff } from 'lucide-react';
+import { validatePassword, generateStrongPassword } from '../utils/passwordUtils';
 import MeetingRoom from './MeetingRoom';
 import './AdminPanel.css';
 
@@ -19,6 +20,8 @@ const AdminPanel = ({ onRefresh }) => {
     const [activeCall, setActiveCall] = useState(null); // { roomId, targetUserName }
 
     const [selectedCallUsers, setSelectedCallUsers] = useState([]);
+    const [passwordError, setPasswordError] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         fetchUsers();
@@ -62,6 +65,14 @@ const AdminPanel = ({ onRefresh }) => {
 
     const handleCreateUser = async (e) => {
         e.preventDefault();
+
+        const error = validatePassword(newUser.password);
+        if (error) {
+            setPasswordError(error);
+            return;
+        }
+        setPasswordError(null);
+
         try {
             await axios.post(`${API_URL}/users`, newUser, {
                 headers: getAuthHeader()
@@ -214,13 +225,42 @@ const AdminPanel = ({ onRefresh }) => {
                                     onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
                                     required
                                 />
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    value={newUser.password}
-                                    onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
-                                    required
-                                />
+                                <div className="password-input-wrapper-admin">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="Password"
+                                        value={newUser.password}
+                                        onChange={(e) => {
+                                            setNewUser({ ...newUser, password: e.target.value });
+                                            setPasswordError(null);
+                                        }}
+                                        required
+                                    />
+                                    <div className="password-actions-admin">
+                                        <button
+                                            type="button"
+                                            className="icon-button-admin"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            title={showPassword ? "Hide Password" : "Show Password"}
+                                        >
+                                            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="icon-button-admin rotate-hover"
+                                            onClick={() => {
+                                                const pass = generateStrongPassword();
+                                                setNewUser({ ...newUser, password: pass });
+                                                setShowPassword(true);
+                                                setPasswordError(null);
+                                            }}
+                                            title="Generate Strong Password"
+                                        >
+                                            <RefreshCw size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                                {passwordError && <div className="validation-error-small">{passwordError}</div>}
                                 <select
                                     value={newUser.role}
                                     onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
@@ -298,37 +338,39 @@ const AdminPanel = ({ onRefresh }) => {
                     </div>
                 </div>
 
-                {selectedUser && selectedUser.role !== 'admin' && (
-                    <div className="admin-section glass-card">
-                        <div className="section-header">
-                            <h2>Module Access for {selectedUser.username}</h2>
-                            <button onClick={saveModuleAccess} className="btn-primary">
-                                Save Changes
-                            </button>
-                        </div>
+                {
+                    selectedUser && selectedUser.role !== 'admin' && (
+                        <div className="admin-section glass-card">
+                            <div className="section-header">
+                                <h2>Module Access for {selectedUser.username}</h2>
+                                <button onClick={saveModuleAccess} className="btn-primary">
+                                    Save Changes
+                                </button>
+                            </div>
 
-                        <div className="modules-list">
-                            {allModules.map((module) => (
-                                <div
-                                    key={module.id}
-                                    className="module-item"
-                                    onClick={() => toggleModuleAccess(module.id)}
-                                >
-                                    <div className="module-checkbox">
-                                        {userModules.includes(module.id) ? (
-                                            <CheckSquare size={20} className="checked" />
-                                        ) : (
-                                            <Square size={20} />
-                                        )}
+                            <div className="modules-list">
+                                {allModules.map((module) => (
+                                    <div
+                                        key={module.id}
+                                        className="module-item"
+                                        onClick={() => toggleModuleAccess(module.id)}
+                                    >
+                                        <div className="module-checkbox">
+                                            {userModules.includes(module.id) ? (
+                                                <CheckSquare size={20} className="checked" />
+                                            ) : (
+                                                <Square size={20} />
+                                            )}
+                                        </div>
+                                        <span>{module.name}</span>
                                     </div>
-                                    <span>{module.name}</span>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
-            </div>
-        </div>
+                    )
+                }
+            </div >
+        </div >
     );
 };
 

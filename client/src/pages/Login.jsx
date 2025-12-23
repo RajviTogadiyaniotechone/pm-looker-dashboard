@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { LogIn, Loader2, Eye, EyeOff } from 'lucide-react';
+import { validatePassword, generateStrongPassword } from '../utils/passwordUtils';
 import './Login.css';
 
 const Login = () => {
