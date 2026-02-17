@@ -70,7 +70,7 @@ const Sidebar = ({ modules, selectedModule, onModuleSelect, showAdminPanel, onAd
             </nav>
 
             <div className="sidebar-footer">
-                <p>© 2024 Nio Dashboard</p>
+                <p>© 2026 Nio Dashboard</p>
             </div>
         </aside>
     );
