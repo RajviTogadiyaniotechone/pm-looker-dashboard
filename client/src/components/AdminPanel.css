@@ -216,7 +216,7 @@
     gap: var(--spacing-sm);
 }
 
-.btn-call-small {
+/* .btn-call-small {
     padding: var(--spacing-xs) var(--spacing-sm);
     background: transparent;
     color: var(--primary);
@@ -227,7 +227,7 @@
 .btn-call-small:hover {
     background: var(--primary);
     color: white;
-}
+} */
 
 .user-info {
     display: flex;
