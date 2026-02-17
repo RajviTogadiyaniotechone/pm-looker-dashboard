@@ -311,7 +311,7 @@ const AdminPanel = ({ onRefresh }) => {
                                         </div>
                                     </div>
                                     <div className="user-actions">
-                                        <button
+                                        {/* <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 handleCallUser(user);
@@ -320,7 +320,7 @@ const AdminPanel = ({ onRefresh }) => {
                                             title="Start Video Call"
                                         >
                                             <Video size={16} />
-                                        </button>
+                                        </button> */}
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
