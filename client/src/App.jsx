@@ -4,7 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { SocketProvider, useSocket } from './context/SocketContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import CallModal from './components/CallModal';
+// import CallModal from './components/CallModal';
 import './App.css';
 
 function AppContent() {
@@ -87,7 +87,6 @@ function AppContent() {
       ) : (
         <Login />
       )}
-      {user && <CallModal />}
     </>
   );
 }
