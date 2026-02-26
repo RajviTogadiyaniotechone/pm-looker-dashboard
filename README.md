@@ -149,6 +149,30 @@ INSERT INTO charts (module_id, title, embed_url, is_visible)
 VALUES (1, 'Project Overview', 'https://lookerstudio.google.com/embed/your-report-id', true);
 ```
 
+## Password Recovery
+
+Since passwords are stored as secure Bcrypt hashes, they cannot be recovered to their original text. However, you can reset passwords using either the UI or the CLI.
+
+### Option 1: UI Reset (Admin Only)
+
+1. Go to the login page and enter **admin** as the username.
+2. Click the **"Forgot Password?"** link that appears.
+3. Enter the `ADMIN_RECOVERY_CODE` from your `server/.env` file.
+4. Set a new password and click **Reset Password**.
+
+### Option 2: CLI Reset (All Users)
+
+1. Open your terminal in the `server` directory.
+2. Run the following command:
+   ```bash
+   node scripts/reset_password.js <username> <new_password>
+   ```
+   *Example:*
+   ```bash
+   node scripts/reset_password.js admin password123
+   ```
+3. The script will hash the new password and update the database record for that user.
+
 ## Usage Guide
 
 ### For Admins

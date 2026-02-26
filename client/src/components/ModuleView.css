@@ -125,14 +125,19 @@
     color: white;
 }
 
-/* chart screen height */
-
+/* Global chart height */
 .chart-embed {
     width: 100%;
     height: 2400px;
     border-radius: var(--radius-lg);
     overflow: hidden;
     background: var(--bg-tertiary);
+}
+
+/* HR Module specific height */
+.hr-view .chart-embed {
+    height: 1000px;
+    /* Adjust this value specifically for HR */
 }
 
 .chart-embed iframe {

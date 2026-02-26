@@ -59,6 +59,21 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const resetAdminPassword = async (recoveryCode, newPassword) => {
+        try {
+            await axios.post(`${API_URL}/auth/reset-admin`, {
+                recoveryCode,
+                newPassword
+            });
+            return { success: true };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.response?.data?.error || 'Reset failed'
+            };
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem('token');
         setUser(null);
@@ -75,6 +90,7 @@ export const AuthProvider = ({ children }) => {
             loading,
             login,
             logout,
+            resetAdminPassword,
             getAuthHeader,
             API_URL,
             isAdmin: user?.role === 'admin'

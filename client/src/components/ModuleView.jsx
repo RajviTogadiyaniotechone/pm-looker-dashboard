@@ -82,7 +82,7 @@ const ModuleView = ({ module, onMarkRead, unreadCounts }) => {
     }
 
     return (
-        <div className="module-view">
+        <div className={`module-view ${module.slug}-view`}>
             {/* <div className="module-header">
                 <div className="module-title-section">
                     <h5>{module.name}</h5>

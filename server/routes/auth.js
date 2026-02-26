@@ -65,4 +65,41 @@ router.get('/verify', async (req, res) => {
     }
 });
 
+// Reset Admin Password (using recovery code)
+router.post('/reset-admin', async (req, res) => {
+    try {
+        const { recoveryCode, newPassword } = req.body;
+        console.log('--- Admin Reset Attempt ---');
+        console.log('Username: admin');
+        console.log('Provided Code:', recoveryCode);
+        console.log('Expected Code (from ENV):', process.env.ADMIN_RECOVERY_CODE);
+
+        if (!recoveryCode || !newPassword) {
+            return res.status(400).json({ error: 'Recovery code and new password required' });
+        }
+
+        // Verify recovery code (trimmed to avoid whitespace issues)
+        if (recoveryCode.trim() !== (process.env.ADMIN_RECOVERY_CODE || '').trim()) {
+            console.error('Error: Recovery code mismatch');
+            return res.status(401).json({ error: 'Invalid recovery code' });
+        }
+
+        // Hash the new password
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(newPassword, salt);
+
+        // Update admin password in DB
+        const result = await db.query(
+            'UPDATE users SET password_hash = $1 WHERE username = $2',
+            [hash, 'admin']
+        );
+
+        console.log('DB Update result:', result.rowCount, 'rows affected');
+        res.json({ message: 'Admin password reset successfully' });
+    } catch (error) {
+        console.error('Reset admin error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 module.exports = router;
