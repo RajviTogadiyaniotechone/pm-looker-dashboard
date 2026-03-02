@@ -288,7 +288,7 @@ const AdminPanel = ({ onRefresh }) => {
                                     onClick={() => handleSelectUser(user)}
                                 >
                                     <div className="user-info">
-                                        <div
+                                        {/* <div
                                             className="user-select-checkbox"
                                             onClick={(e) => {
                                                 e.stopPropagation();
@@ -301,7 +301,7 @@ const AdminPanel = ({ onRefresh }) => {
                                             ) : (
                                                 <Square size={20} color="#cbd5e0" />
                                             )}
-                                        </div>
+                                        </div> */}
                                         <div className="user-avatar-small">
                                             <Users size={16} />
                                         </div>
